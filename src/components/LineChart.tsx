@@ -18,11 +18,10 @@ export function LineChart({ values, height = 170 }: { values: number[]; height?:
       <polyline points={pts} fill="none" stroke="#d97706" strokeWidth={4} strokeLinejoin="round" strokeLinecap="round" />
       {values.map((v, i) => (
         <g key={i}>
-          <circle cx={x(i)} cy={y(v)} r={5} fill="#fff" stroke="#d97706" strokeWidth={3} />
-          <text x={x(i)} y={height - 8} textAnchor="middle" fontSize={13} fill="#3b2f2f">{i === 0 ? 'Start' : i}</text>
+          <text x={x(i)} y={y(v) + 7} textAnchor="middle" fontSize={i === values.length - 1 ? 26 : 17}>🍞</text>
+          <text x={x(i)} y={height - 8} textAnchor="middle" fontSize={14} fontWeight={700} fill="#3b2f2f">{i === 0 ? 'Start' : i}</text>
         </g>
       ))}
-      <text x={pad.l} y={12} fontSize={13} fontWeight={700} fill="#3b2f2f">🍞 Bread price</text>
     </svg>
   );
 }

@@ -83,8 +83,9 @@ export function PickLand() {
               onClick={() => pick(n.id)}
               className={`flex flex-col gap-0.5 rounded-2xl border-[3px] p-2 text-left text-[14px] leading-tight ${sel === n.id ? 'border-amber-500 bg-amber-100' : 'border-ink bg-white'}`}
             >
-              <span className="text-[17px] font-black"><span className="text-2xl">{n.icon}</span> {n.name}</span>
-              <span className="font-bold" style={{ color: n.color }}>{n.region} · {n.moneyKind}</span>
+              <span className="self-center text-5xl">{n.icon}</span>
+              <span className="self-center text-[17px] font-black">{n.name}</span>
+              <span className="self-center text-center font-bold" style={{ color: n.color }}>{n.moneyKind}</span>
               <span>👍 {n.strong}</span>
               <span>👎 {n.weak}</span>
               {settings.koHints && <span className="text-[12px] text-ink/70">🇰🇷 {n.ko}</span>}

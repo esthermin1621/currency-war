@@ -23,6 +23,8 @@ export interface Card {
   name: string;
   text: string;
   hint: string;
+  /** picture hint: what goes up or down */
+  pic?: string;
   icon: string;
   effect: Effect;
   tag?: string;

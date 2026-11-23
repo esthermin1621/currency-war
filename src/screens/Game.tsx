@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { cardById, eventById, nationDef, wordById } from '../data';
 import { CardView } from '../components/CardView';
-import { CityScene } from '../components/CityScene';
+import { Bubble } from '../components/Arti';
 import { SpeakButton } from '../components/SpeakButton';
-import { StatPanel } from '../components/StatPanel';
+import { StatStrip } from '../components/StatStrip';
+import { TownScene } from '../components/TownScene';
 import { WorldMap } from '../components/WorldMap';
 import type { GuessDir } from '../engine/detect';
 import type { Role } from '../engine/types';
@@ -13,60 +14,64 @@ import { useGame } from '../store/game';
 import { Report } from './Report';
 import { Result } from './Result';
 
-/** Main game frame: numbers on the left, world map on top, this year's step below. */
+/** Main game frame: one big picture on top (town or world map), picture meters, then this year's step. */
 export function GameShell() {
   const { game, phase, go, setOverlay } = useGame();
+  const [view, setView] = useState<'auto' | 'town' | 'map'>('auto');
+  useEffect(() => setView('auto'), [phase]);
   if (!game) return null;
   const { world } = game;
   const me = world.nations[world.playerId];
   const def = nationDef(me.id);
-  const shownYear = Math.min(world.options.turns, phase === 'result' || phase === 'report' ? world.year - 1 : world.year);
+  const turns = world.options.turns;
+  const shownYear = Math.min(turns, phase === 'result' || phase === 'report' ? world.year - 1 : world.year);
   const step = STEPS.findIndex((s) => s.phase === phase);
+  const showMap = view === 'auto' ? phase === 'report' : view === 'map';
 
   return (
     <div className="flex h-full flex-col gap-2 p-2.5">
       <header className="flex items-center gap-2">
-        <div className="panel flex items-center gap-2 px-3 py-1 text-xl font-black">
-          <span className="text-3xl">{def.icon}</span>
-          <span className="whitespace-nowrap">{def.name}</span>
-          <span className="hidden whitespace-nowrap text-[15px] font-bold text-ink/60 xl:inline">{game.team}</span>
+        <div className="panel flex items-center gap-2 whitespace-nowrap px-3 py-1 text-xl font-black">
+          <span className="text-3xl">{def.icon}</span>{def.name}
         </div>
-        <div className="panel whitespace-nowrap px-3 py-1.5 text-xl font-black">📅 Year {shownYear} of {world.options.turns}</div>
-        <ol className="flex flex-1 items-center justify-center gap-1">
-          {STEPS.map((s, i) => (
-            <li
-              key={s.phase}
-              className={`flex items-center gap-1 rounded-full border-2 px-2.5 py-1 text-[15px] font-bold ${i === step ? 'border-ink bg-amber-300' : i < step ? 'border-ink/40 bg-green-100 text-ink/60' : 'border-ink/30 bg-white text-ink/50'}`}
+        <div className="panel flex items-center gap-1.5 px-3 py-1.5" aria-label={`Year ${shownYear} of ${turns}`}>
+          <span className="mr-1 whitespace-nowrap text-xl font-black">Year</span>
+          {Array.from({ length: turns }, (_, i) => (
+            <span
+              key={i}
+              className={`flex items-center justify-center rounded-full border-2 border-ink font-black ${i + 1 === shownYear ? 'h-9 w-9 bg-amber-300 text-xl' : i + 1 < shownYear ? 'h-5 w-5 bg-green-400 text-[0px]' : 'h-5 w-5 bg-white text-[0px]'}`}
             >
-              <span>{s.icon}</span>
-              <span className={i === step ? '' : 'hidden xl:inline'}>{s.label}</span>
-            </li>
+              {i + 1}
+            </span>
           ))}
-        </ol>
-        <button className="btn btn-white !min-h-[52px] !px-3 !text-[17px]" onClick={() => setOverlay('words')} aria-label="My Money Words"><span className="whitespace-nowrap">📖 {game.words.length}/10</span></button>
+        </div>
+        <span className="flex-1 whitespace-nowrap text-center text-lg" aria-label={STEPS[step]?.label}>
+          {STEPS.map((s, i) => <span key={s.phase} className={i === step ? 'mx-0.5 text-3xl' : 'opacity-30'}>{s.icon}</span>)}
+        </span>
+        <button className="btn btn-white !min-h-[52px] !px-3 !text-[17px]" onClick={() => setView(showMap ? 'town' : 'map')}>
+          <span className="whitespace-nowrap">{showMap ? '🏘️ Town' : '🌍 World'}</span>
+        </button>
+        <button className="btn btn-white !min-h-[52px] !px-3 !text-[17px]" onClick={() => setOverlay('words')} aria-label="My Money Words">
+          <span className="whitespace-nowrap">📖 {game.words.length}</span>
+        </button>
         <button className="btn btn-white !min-h-[52px] !px-3" aria-label="Teacher" onClick={() => setOverlay('teacher')}>🧑‍🏫</button>
         <button className="btn btn-white !min-h-[52px] !px-3" aria-label="Home" onClick={() => go('title')}>🏠</button>
       </header>
 
-      <div className="grid min-h-0 flex-1 grid-cols-[250px_1fr] gap-2.5">
-        <aside className="panel overflow-auto p-2">
-          <StatPanel s={me} prev={game.last?.prev} />
-          <CityScene s={me} />
-        </aside>
-        <main className="flex min-h-0 flex-col gap-2">
-          <div className="panel shrink-0 overflow-hidden !bg-sea">
-            <WorldMap crop className="block w-full" states={world.nations} playerId={world.playerId} />
-          </div>
-          <section className="panel min-h-0 flex-1 overflow-auto p-3">
-            {phase === 'news' && <News />}
-            {phase === 'president' && <ChoiceStep role="president" />}
-            {phase === 'bank' && <ChoiceStep role="bank" />}
-            {phase === 'guess' && <Guess />}
-            {phase === 'result' && <Result />}
-            {phase === 'report' && <Report />}
-          </section>
-        </main>
+      <div className="panel aspect-[1000/250] max-h-[42%] w-full shrink-0 overflow-hidden !bg-[#8fd3f4]">
+        {showMap
+          ? <WorldMap crop medals className="h-full w-full" states={world.nations} playerId={world.playerId} />
+          : <TownScene s={me} />}
       </div>
+      <StatStrip s={me} prev={game.last?.prev} />
+      <section className="panel min-h-0 flex-1 overflow-auto p-3">
+        {phase === 'news' && <News />}
+        {phase === 'president' && <ChoiceStep role="president" />}
+        {phase === 'bank' && <ChoiceStep role="bank" />}
+        {phase === 'guess' && <Guess />}
+        {phase === 'result' && <Result />}
+        {phase === 'report' && <Report />}
+      </section>
     </div>
   );
 }
@@ -79,10 +84,12 @@ function Quiz({ wordId }: { wordId: string }) {
   const options = wordId.length % 2 ? [w.quiz.right, w.quiz.wrong] : [w.quiz.wrong, w.quiz.right];
   return (
     <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-      <div className="flex items-center gap-3">
-        <h2 className="text-3xl font-black">⭐ Quick question: {w.quiz.q}</h2>
-        <SpeakButton small text={w.quiz.q} />
-      </div>
+      <Bubble>
+        <div className="flex items-center gap-3">
+          <h2 className="text-3xl font-black">⭐ Quick question: {w.quiz.q}</h2>
+          <SpeakButton small text={w.quiz.q} />
+        </div>
+      </Bubble>
       <div className="flex gap-5">
         {options.map((o) => (
           <button
@@ -90,7 +97,7 @@ function Quiz({ wordId }: { wordId: string }) {
             onClick={() => setState(o === w.quiz.right ? 'right' : 'wrong')}
             className={`w-64 rounded-3xl border-[3px] border-ink bg-white p-4 shadow-[0_5px_0_#3b2f2f] ${state === 'wrong' && o === w.quiz.wrong ? 'shake opacity-50' : ''} ${state === 'right' && o === w.quiz.right ? '!bg-green-200' : ''}`}
           >
-            <div className="text-5xl">{o.icon}</div>
+            <div className="text-6xl">{o.icon}</div>
             <div className="text-xl font-bold">{o.text}</div>
           </button>
         ))}
@@ -113,19 +120,22 @@ function News() {
   }, [event.id, quiz, waiting]);
   if (quiz) return <Quiz wordId={quiz} />;
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-      <div className="text-[17px] font-black uppercase tracking-widest text-ink/60">
-        📰 Time World News {event.nation ? `· Long ago in ${def.name}` : ''}
+    <div className="flex h-full items-center justify-center gap-6">
+      <div className="pop flex h-44 w-44 shrink-0 items-center justify-center rounded-[36px] border-[3px] border-ink bg-amber-100 text-[110px] leading-none shadow-[0_5px_0_#3b2f2f]">
+        {event.icon}
       </div>
-      <div className="pop flex items-center gap-5 rounded-3xl border-[3px] border-ink bg-amber-50 px-8 py-4">
-        <span className="text-7xl">{event.icon}</span>
-        <div className="text-left">
-          <div className="text-[17px] font-bold text-ink/60">{event.name}</div>
-          <div className="text-3xl font-black">{event.text}</div>
+      <div className="flex flex-col items-start gap-3">
+        <div className="rounded-full bg-ink px-3 py-0.5 text-[16px] font-black text-white">
+          📰 News{event.nation ? ` · Long ago in ${def.name}` : ''}
         </div>
-        <SpeakButton text={event.text} />
+        <Bubble>
+          <div className="flex items-center gap-3">
+            <div className="text-3xl font-black">{event.text}</div>
+            <SpeakButton text={event.text} />
+          </div>
+        </Bubble>
+        <button className="btn self-center" onClick={() => go('president')}>OK ➡</button>
       </div>
-      <button className="btn" onClick={() => go('president')}>OK ➡</button>
     </div>
   );
 }
@@ -140,15 +150,17 @@ function ChoiceStep({ role }: { role: Role }) {
       : c,
   );
   const title = role === 'president' ? '👑 President' : '🏦 Central Bank';
-  const line = role === 'president' ? 'You spend and collect money. Pick one card.' : 'You make the money. Pick one card.';
+  const line = role === 'president' ? 'You spend the gold. Pick one card.' : 'You make the money. Pick one card.';
   return (
     <div className="flex h-full flex-col items-center gap-2">
-      <div className="flex items-center gap-3">
-        <h2 className="whitespace-nowrap text-2xl font-black">{title}{g.mode === 'team' ? ', your turn!' : ''}</h2>
-        <span className="text-[18px]">{line}</span>
-        <SpeakButton small text={line} />
-      </div>
-      <div className="flex flex-1 flex-wrap items-center justify-center gap-2">
+      <Bubble size={54}>
+        <div className="flex items-center gap-3">
+          <h2 className="whitespace-nowrap text-2xl font-black">{title}{g.mode === 'team' ? ', your turn!' : ''}</h2>
+          <span className="text-xl">{line}</span>
+          <SpeakButton small text={line} />
+        </div>
+      </Bubble>
+      <div className="flex flex-1 flex-wrap items-center justify-center gap-4">
         {cards.map((c) => <CardView key={`${g.world.year}-${c.id}`} card={c} onChoose={() => pickCard(role, c.id)} />)}
       </div>
     </div>
@@ -165,14 +177,16 @@ function Guess() {
       <div className="flex gap-2 text-[17px] font-bold">
         {picked.map((c) => c && <span key={c.id} className="rounded-full border-2 border-ink/60 bg-white px-3 py-1">{c.icon} {c.name}</span>)}
       </div>
-      <div className="flex items-center gap-3">
-        <h2 className="text-4xl font-black">🤔 {q}</h2>
-        <SpeakButton small text={q} />
-      </div>
+      <Bubble>
+        <div className="flex items-center gap-3">
+          <h2 className="text-4xl font-black">{q}</h2>
+          <SpeakButton small text={q} />
+        </div>
+      </Bubble>
       <div className="flex gap-5">
         {(['up', 'same', 'down'] as GuessDir[]).map((d) => (
-          <button key={d} className="btn btn-white !h-32 w-48 !text-2xl" onClick={() => makeGuess(d)}>
-            <div className="text-5xl">🍞{GUESS[d].icon}</div>
+          <button key={d} className="btn btn-white !h-36 w-52 !text-2xl" onClick={() => makeGuess(d)}>
+            <div className="text-6xl">🍞{GUESS[d].icon}</div>
             {GUESS[d].label}
           </button>
         ))}
