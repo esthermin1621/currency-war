@@ -13,7 +13,7 @@ export function Title() {
     <div className="relative flex h-full flex-col items-center justify-center gap-5 overflow-hidden p-6">
       <WorldMap className="pointer-events-none absolute inset-0 h-full w-full opacity-15" />
       <div className="relative text-center">
-        <div className="flex justify-center"><AtiLogo height={190} /></div>
+        <div className="flex justify-center"><AtiLogo height={170} /></div>
         <p className="mt-2 text-2xl">Lead a land. Take care of its money.</p>
       </div>
       <div className="relative">

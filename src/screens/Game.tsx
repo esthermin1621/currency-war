@@ -32,7 +32,7 @@ export function GameShell() {
   return (
     <div className="flex h-full flex-col gap-2 p-2.5">
       <header className="flex items-center gap-2">
-        <button className="shrink-0" aria-label="Home" onClick={() => go('title')}><AtiLogo height={42} tagline={false} /></button>
+        <button className="shrink-0" aria-label="Home" onClick={() => go('title')}><AtiLogo height={54} tagline={false} /></button>
         <div className="panel flex items-center gap-2 whitespace-nowrap px-3 py-1 text-xl font-black">
           <span className="text-3xl">{def.icon}</span><span className="hidden xl:inline">{def.name}</span>
         </div>

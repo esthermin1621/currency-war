@@ -91,7 +91,9 @@ export function WorldMap({ states, playerId, selected, allowed, onSelect, classN
       {!crop && (
         <g transform={`translate(${W / 2 - 160}, ${H - 38})`}>
           <rect width={320} height={32} rx={16} fill="#fff" stroke="#3b2f2f" strokeWidth={2} />
-          <text x={160} y={22} textAnchor="middle" fontSize={16} fontWeight={800} fill="#3b2f2f">🪙 All lands trade with ATI COIN</text>
+          <circle cx={30} cy={16} r={13} fill="#fbbf24" />
+          <image href="/ati-coin.png" x={19} y={5} width={22} height={22} />
+          <text x={170} y={22} textAnchor="middle" fontSize={16} fontWeight={800} fill="#3b2f2f">All lands trade with ATI COIN</text>
         </g>
       )}
     </svg>

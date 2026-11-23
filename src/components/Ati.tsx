@@ -28,32 +28,30 @@ export function Bubble({ children, sad, size }: { children: React.ReactNode; sad
   );
 }
 
-/** ATI ATI logo: the coin buddy and a chunky, playful wordmark. */
+/** The ATI ATI logo (the team's own artwork, in public/ati-logo.png). */
 export function AtiLogo({ height = 120, tagline = true }: { height?: number; tagline?: boolean }) {
-  const h = tagline ? 132 : 104;
   return (
-    <svg viewBox={`0 0 392 ${h}`} height={height} className="block" role="img" aria-label="ATI ATI">
-      <g transform="translate(4,4) scale(0.96)">
-        <circle cx="50" cy="56" r="46" fill="#d97706" />
-        <circle cx="50" cy="50" r="46" fill="#fbbf24" stroke="#3b2f2f" strokeWidth="5" />
-        <circle cx="50" cy="50" r="35" fill="none" stroke="#f59e0b" strokeWidth="4" />
-        <circle cx="36" cy="44" r="6" fill="#3b2f2f" />
-        <circle cx="64" cy="44" r="6" fill="#3b2f2f" />
-        <circle cx="38" cy="42" r="2" fill="#fff" />
-        <circle cx="66" cy="42" r="2" fill="#fff" />
-        <circle cx="26" cy="58" r="6" fill="#fb7185" opacity=".6" />
-        <circle cx="74" cy="58" r="6" fill="#fb7185" opacity=".6" />
-        <path d="M34 60 Q50 78 66 60" fill="none" stroke="#3b2f2f" strokeWidth="5" strokeLinecap="round" />
-      </g>
-      <g fontWeight={900} fontSize={66} stroke="#3b2f2f" strokeWidth={10} paintOrder="stroke" strokeLinejoin="round">
-        <text x={112} y={78} fill="#fbbf24" transform="rotate(-4 112 78)">ATI</text>
-        <text x={240} y={84} fill="#38bdf8" transform="rotate(4 240 84)">ATI</text>
-      </g>
+    <div className="flex items-center gap-4">
+      <img src="/ati-logo.png" alt="ATI ATI" height={height} width={height} style={{ height, width: height }} className="drop-shadow-[0_5px_0_rgba(59,47,47,.25)]" />
       {tagline && (
-        <text x={250} y={124} textAnchor="middle" fontSize={22} fontWeight={800} fill="#b45309" letterSpacing={3}>
-          CURRENCY WARS
-        </text>
+        <div className="text-left leading-none">
+          <div className="text-[56px] font-black tracking-tight">Currency</div>
+          <div className="text-[56px] font-black tracking-tight">Wars</div>
+          <div className="mt-2 text-2xl font-extrabold tracking-[0.2em] text-sky-600">ATI COIN</div>
+        </div>
       )}
-    </svg>
+    </div>
+  );
+}
+
+/** One ATI COIN: a gold coin with the ATI ATI hand on its face. */
+export function AtiCoin({ size = 40 }: { size?: number }) {
+  return (
+    <span
+      className="inline-block shrink-0 overflow-hidden rounded-full border-[3px] border-amber-400 bg-sky-500 align-middle shadow-[0_2px_0_#b45309]"
+      style={{ width: size, height: size }}
+    >
+      <img src="/ati-coin.png" alt="ATI COIN" className="h-full w-full" />
+    </span>
   );
 }
