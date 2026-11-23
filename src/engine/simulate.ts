@@ -163,7 +163,7 @@ export function simulateYear(prev: NationState, choice: Choice, event: EventCard
   s.jobs = clamp(prev.jobs + C.goodsJobs * goodsGrowth - C.interestJobs * r - C.deflationJobs * Math.max(0, -inflation) + acc.jobs);
   const jobsDelta = s.jobs - prev.jobs;
 
-  // 6. Trust, treasury and debt, happiness, Arti-Coin value.
+  // 6. Trust, treasury and debt, happiness, ATI COIN value.
   const T = C.trust;
   let trust = prev.trust + acc.trust;
   if (inflation > T.hyperInflation) trust -= T.hyperLoss;
@@ -191,7 +191,7 @@ export function simulateYear(prev: NationState, choice: Choice, event: EventCard
 
   const lostTrust = s.trust <= C.detect.lostTrust;
   if (s.trust <= 0) {
-    // People use Arti-Coin now. The land starts new money next year (Rebuild mode).
+    // People use ATI COIN now. The land starts new money next year (Rebuild mode).
     s.trust = C.rebuildTrust;
     s.rebasePending = true;
     s.rebuilds += 1;

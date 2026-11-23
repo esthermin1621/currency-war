@@ -33,7 +33,7 @@ export const NOTE: Record<string, string> = {
   kingDebt: '👑 You did not pay back your gold. People trust you less.',
   goldCapped: '🥇 You need gold to make money. You made only a little.',
   leftGold: '🔓 You do not need gold now. You can make more money.',
-  rebuild: '🪙 People use Arti-Coin now. You must start new money.',
+  rebuild: '🪙 People use ATI COIN now. You must start new money.',
   btcUp: '₿ Your Bitcoin went up!',
   btcDown: '₿ Your Bitcoin went down!',
   btcBought: '₿ You bought Bitcoin.',

@@ -33,7 +33,7 @@ const NAME: Record<NationId, { dx: number; dy: number; anchor: 'middle' | 'start
   usa: { dx: 0, dy: 40, anchor: 'middle' },
 };
 
-/** Ring colour and face show how strong each money is against Arti-Coin. */
+/** Ring colour and face show how strong each money is against ATI COIN. */
 const health = (ac: number) => (ac >= 100 ? '#16a34a' : ac >= 60 ? '#f59e0b' : '#dc2626');
 const mood = (ac: number) => (ac >= 100 ? '😀' : ac >= 60 ? '😐' : '😟');
 const MEDALS = ['🥇', '🥈', '🥉'];
@@ -91,7 +91,7 @@ export function WorldMap({ states, playerId, selected, allowed, onSelect, classN
       {!crop && (
         <g transform={`translate(${W / 2 - 160}, ${H - 38})`}>
           <rect width={320} height={32} rx={16} fill="#fff" stroke="#3b2f2f" strokeWidth={2} />
-          <text x={160} y={22} textAnchor="middle" fontSize={16} fontWeight={800} fill="#3b2f2f">🪙 All lands trade with Arti-Coin</text>
+          <text x={160} y={22} textAnchor="middle" fontSize={16} fontWeight={800} fill="#3b2f2f">🪙 All lands trade with ATI COIN</text>
         </g>
       )}
     </svg>

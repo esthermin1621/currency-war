@@ -8,7 +8,7 @@
     "mild": ["Bread went up a tiny bit. No big deal.", "A little up. Keep an eye on it! 👀"]
   },
   "guessRight": ["⭐ You got it! Are you a wizard? 🧙", "⭐ Yes! You can read bread like a book!", "⭐ Right! Your brain is so big! 🧠"],
-  "guessWrong": ["Oops! Even Arti gets it wrong.", "Not this time. That bread is sneaky! 🍞", "Good try! The bread tricked you."],
+  "guessWrong": ["Oops! Even Ati gets it wrong.", "Not this time. That bread is sneaky! 🍞", "Good try! The bread tricked you."],
   "news": {
     "rome2": "Soldiers eat a lot of bread! 🍞",
     "rome5": "The cows look sad too. 🐄",
@@ -36,22 +36,22 @@
     "warEvent": "Be brave. And be smart with money!",
     "warNearby": "Shh. Let us stay out of it. 🤫",
     "peace": "Hooray! Everyone can go home! 🎉",
-    "quiet": "So quiet. Arti takes a nap. 😴"
+    "quiet": "So quiet. Ati takes a nap. 😴"
   },
   "town": {
     "veryHigh": ["Bread costs HOW much?!", "I need a cart for my coins!"],
     "high": ["Hey! Bread cost less last year!", "My coins got so small!"],
     "low": ["Cheap bread! But no one buys.", "Please buy my bread! Anyone?"],
-    "noTrust": ["Is this coin even real?", "I want Arti-Coin, please!"],
+    "noTrust": ["Is this coin even real?", "I want ATI COIN, please!"],
     "noJobs": ["No work. I am so bored.", "My hammer misses me. 🔨"],
     "sad": ["I need a big hug. 🤗", "Today is not my day."],
     "happy": ["Yum! Fresh bread today!", "What a nice day! ☀️", "I love this town!"]
   },
   "end": {
-    "golden": "Arti does a happy flip! 🤸",
-    "strong": "Arti gives you a high five! ✋",
-    "struggling": "Arti says: next time will be better!",
-    "fallen": "Arti found one coin under the couch. 🛋️"
+    "golden": "Ati does a happy flip! 🤸",
+    "strong": "Ati gives you a high five! ✋",
+    "struggling": "Ati says: next time will be better!",
+    "fallen": "Ati found one coin under the couch. 🛋️"
   },
-  "hello": "Hi! I am Arti. I am a coin that talks!"
+  "hello": "Hi! I am Ati. I am a coin that talks!"
 }

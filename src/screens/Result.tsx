@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Bubble } from '../components/Arti';
+import { Bubble } from '../components/Ati';
 import { JOKES, pickLine } from '../lib/fun';
 import { SpeakButton } from '../components/SpeakButton';
 import { NOTE, PHENOMENON, REASON } from '../lib/text';

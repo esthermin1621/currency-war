@@ -2,7 +2,7 @@
 export const CONFIG = {
   startBread: 10,
   startMoney: 100,
-  worldInflation: 0.02, // Arti-Coin grows about 2% a year
+  worldInflation: 0.02, // ATI COIN grows about 2% a year
   gBase: 0, // natural goods growth per year
   baseInterest: 3,
   interestGoods: 0.005, // goods growth lost per interest point above 3

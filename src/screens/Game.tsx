@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { cardById, eventById, nationDef, wordById } from '../data';
 import { CardView } from '../components/CardView';
-import { Bubble } from '../components/Arti';
+import { AtiLogo, Bubble } from '../components/Ati';
 import { SpeakButton } from '../components/SpeakButton';
 import { StatStrip } from '../components/StatStrip';
 import { TownScene } from '../components/TownScene';
@@ -32,15 +32,16 @@ export function GameShell() {
   return (
     <div className="flex h-full flex-col gap-2 p-2.5">
       <header className="flex items-center gap-2">
+        <button className="shrink-0" aria-label="Home" onClick={() => go('title')}><AtiLogo height={42} tagline={false} /></button>
         <div className="panel flex items-center gap-2 whitespace-nowrap px-3 py-1 text-xl font-black">
-          <span className="text-3xl">{def.icon}</span>{def.name}
+          <span className="text-3xl">{def.icon}</span><span className="hidden xl:inline">{def.name}</span>
         </div>
-        <div className="panel flex items-center gap-1.5 px-3 py-1.5" aria-label={`Year ${shownYear} of ${turns}`}>
+        <div className="panel flex items-center gap-1 px-3 py-1.5" aria-label={`Year ${shownYear} of ${turns}`}>
           <span className="mr-1 whitespace-nowrap text-xl font-black">Year</span>
           {Array.from({ length: turns }, (_, i) => (
             <span
               key={i}
-              className={`flex items-center justify-center rounded-full border-2 border-ink font-black ${i + 1 === shownYear ? 'h-9 w-9 bg-amber-300 text-xl' : i + 1 < shownYear ? 'h-5 w-5 bg-green-400 text-[0px]' : 'h-5 w-5 bg-white text-[0px]'}`}
+              className={`flex items-center justify-center rounded-full border-2 border-ink font-black ${i + 1 === shownYear ? 'h-9 w-9 bg-amber-300 text-xl' : i + 1 < shownYear ? 'h-4 w-4 bg-green-400 text-[0px]' : 'h-4 w-4 bg-white text-[0px]'}`}
             >
               {i + 1}
             </span>
@@ -56,7 +57,6 @@ export function GameShell() {
           <span className="whitespace-nowrap">📖 {game.words.length}</span>
         </button>
         <button className="btn btn-white !min-h-[52px] !px-3" aria-label="Teacher" onClick={() => setOverlay('teacher')}>🧑‍🏫</button>
-        <button className="btn btn-white !min-h-[52px] !px-3" aria-label="Home" onClick={() => go('title')}>🏠</button>
       </header>
 
       <div className="panel aspect-[1000/250] max-h-[42%] w-full shrink-0 overflow-hidden !bg-[#8fd3f4]">

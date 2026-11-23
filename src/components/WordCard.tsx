@@ -37,7 +37,7 @@ export function WordCardModal() {
   const me = game.world.nations[game.world.playerId];
   const def = nationDef(me.id);
   const rate = (def.acRate * 100) / me.acValue;
-  const happened = word.id === 'exchange' ? `Now 1 Arti-Coin = ${rate.toFixed(1)} ${def.currency}.` : undefined;
+  const happened = word.id === 'exchange' ? `Now 1 ATI COIN = ${rate.toFixed(1)} ${def.currency}.` : undefined;
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-ink/60 p-6">
       <div className="pop w-full max-w-2xl">
