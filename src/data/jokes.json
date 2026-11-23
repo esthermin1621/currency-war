@@ -1,0 +1,57 @@
+{
+  "result": {
+    "hyperinflation": ["My piggy bank is crying! 🐷", "Bread costs a wagon of coins now!", "Even my coins want to run away! 🏃", "This bread is fancier than a king! 👑"],
+    "stagflation": ["Bread goes up. Jobs go down. Ouch!", "The hammers took a nap. Bread did not. 😴", "Two bad things? That is one too many!"],
+    "inflation": ["Bread is getting too big for its pants! 👖", "Uh-oh. My coins buy less bread now.", "Is there gold inside that bread? 🤔"],
+    "deflation": ["Cheap bread! But no one is buying it.", "The shops are so quiet. I hear a bug. 🦗", "People wait and wait. The baker is sad."],
+    "stable": ["Nice! The bread is happy. So am I!", "The baker does a little dance! 💃", "Slow and steady, like a turtle! 🐢"],
+    "mild": ["Bread went up a tiny bit. No big deal.", "A little up. Keep an eye on it! 👀"]
+  },
+  "guessRight": ["⭐ You got it! Are you a wizard? 🧙", "⭐ Yes! You can read bread like a book!", "⭐ Right! Your brain is so big! 🧠"],
+  "guessWrong": ["Oops! Even Arti gets it wrong.", "Not this time. That bread is sneaky! 🍞", "Good try! The bread tricked you."],
+  "news": {
+    "rome2": "Soldiers eat a lot of bread! 🍞",
+    "rome5": "The cows look sad too. 🐄",
+    "rome8": "A king can make rules. He cannot make food!",
+    "spain2": "So shiny! But can we eat silver? 🤔",
+    "spain5": "Bye-bye, silver! Have a nice trip! 👋",
+    "spain8": "Uh-oh. The king has empty pockets!",
+    "khan1": "No more coin mix-ups! Yay!",
+    "khan3": "Paper money! Do not let it blow away! 🌬️",
+    "khan7": "War costs so much money. Hmm...",
+    "dragon2": "Silver, silver, everywhere!",
+    "dragon5": "More silver! Hold on to your hats! 🎩",
+    "dragon8": "Come back, silver! We miss you! 😢",
+    "calm1": "Nice vase! But can it buy one egg? 🥚",
+    "calm4": "New coins! They are so shiny! ✨",
+    "calm7": "Under the bed? In a sock? Where did they go?",
+    "usa2": "Print, print, print! Be careful!",
+    "usa5": "People hug their money tight. 😟",
+    "usa8": "No oil? The trucks take a nap. 🚚💤",
+    "goodHarvest": "So much corn! Popcorn party! 🍿",
+    "storm": "The wind took the farmer's hat! 🎩",
+    "invention": "A new tool! Work goes zoom! 🚀",
+    "tradeFair": "Camels, ships, and lots of fun stuff! 🐪",
+    "rumor": "Fake? No way! Bite one and see! 🦷",
+    "warEvent": "Be brave. And be smart with money!",
+    "warNearby": "Shh. Let us stay out of it. 🤫",
+    "peace": "Hooray! Everyone can go home! 🎉",
+    "quiet": "So quiet. Arti takes a nap. 😴"
+  },
+  "town": {
+    "veryHigh": ["Bread costs HOW much?!", "I need a cart for my coins!"],
+    "high": ["Hey! Bread cost less last year!", "My coins got so small!"],
+    "low": ["Cheap bread! But no one buys.", "Please buy my bread! Anyone?"],
+    "noTrust": ["Is this coin even real?", "I want Arti-Coin, please!"],
+    "noJobs": ["No work. I am so bored.", "My hammer misses me. 🔨"],
+    "sad": ["I need a big hug. 🤗", "Today is not my day."],
+    "happy": ["Yum! Fresh bread today!", "What a nice day! ☀️", "I love this town!"]
+  },
+  "end": {
+    "golden": "Arti does a happy flip! 🤸",
+    "strong": "Arti gives you a high five! ✋",
+    "struggling": "Arti says: next time will be better!",
+    "fallen": "Arti found one coin under the couch. 🛋️"
+  },
+  "hello": "Hi! I am Arti. I am a coin that talks!"
+}

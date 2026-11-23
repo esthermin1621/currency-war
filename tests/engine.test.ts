@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CARDS, EVENTS, NATIONS, cardById, nationDef } from '../src/data';
+import jokes from '../src/data/jokes.json';
 import { detectPhenomenon, priceDirection } from '../src/engine/detect';
 import { createWorld, dealHand } from '../src/engine/game';
 import { makeRng } from '../src/engine/rng';
@@ -49,7 +50,8 @@ describe('engine', () => {
   });
 
   it('player-facing sentences have 10 words or fewer', () => {
-    const texts = [...CARDS.flatMap((c) => [c.text, c.hint]), ...EVENTS.map((e) => e.text)];
+    const flat = (v: unknown): string[] => (typeof v === 'string' ? [v] : Object.values(v as object).flatMap(flat));
+    const texts = [...CARDS.flatMap((c) => [c.text, c.hint]), ...EVENTS.map((e) => e.text), ...flat(jokes)];
     for (const t of texts) {
       for (const sentence of t.split(/[.!?]+/).filter((x) => x.trim())) {
         expect(sentence.trim().split(/\s+/).length, sentence).toBeLessThanOrEqual(10);

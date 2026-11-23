@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { NATIONS, nationDef } from '../data';
+import { Bubble } from '../components/Arti';
 import { SpeakButton } from '../components/SpeakButton';
+import { JOKES } from '../lib/fun';
 import { WorldMap } from '../components/WorldMap';
 import type { NationId } from '../engine/types';
 import { useGame } from '../store/game';
@@ -9,12 +11,17 @@ export function Title() {
   const { go, game, setOverlay, settings } = useGame();
   return (
     <div className="relative flex h-full flex-col items-center justify-center gap-5 overflow-hidden p-6">
-      <WorldMap className="pointer-events-none absolute inset-0 h-full w-full opacity-30" />
+      <WorldMap className="pointer-events-none absolute inset-0 h-full w-full opacity-15" />
       <div className="relative text-center">
         <div className="text-7xl">🪙</div>
         <h1 className="text-6xl font-black tracking-tight">Currency Wars</h1>
         <div className="text-3xl font-extrabold text-amber-700">Arti-Coin</div>
         <p className="mt-2 text-2xl">Lead a land. Take care of its money.</p>
+      </div>
+      <div className="relative">
+        <Bubble size={64}>
+          <div className="flex items-center gap-2 text-xl font-bold">{JOKES.hello} <SpeakButton small text={JOKES.hello} /></div>
+        </Bubble>
       </div>
       <div className="relative flex flex-col items-stretch gap-3">
         {game && <button className="btn btn-green" onClick={() => go(game.world.year > game.world.options.turns ? 'end' : 'news')}>▶ Keep Playing</button>}

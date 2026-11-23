@@ -10,6 +10,7 @@ import type { GuessDir } from '../engine/detect';
 import type { Role } from '../engine/types';
 import { speak } from '../lib/speech';
 import { GUESS, STEPS } from '../lib/text';
+import { JOKES } from '../lib/fun';
 import { useGame } from '../store/game';
 import { Report } from './Report';
 import { Result } from './Result';
@@ -61,7 +62,7 @@ export function GameShell() {
       <div className="panel aspect-[1000/250] max-h-[42%] w-full shrink-0 overflow-hidden !bg-[#8fd3f4]">
         {showMap
           ? <WorldMap crop medals className="h-full w-full" states={world.nations} playerId={world.playerId} />
-          : <TownScene s={me} />}
+          : <TownScene s={me} year={world.year} />}
       </div>
       <StatStrip s={me} prev={game.last?.prev} />
       <section className="panel min-h-0 flex-1 overflow-auto p-3">
@@ -113,6 +114,7 @@ function News() {
   const world = game!.world;
   const event = eventById(world.schedules[world.playerId][world.year - 1])!;
   const def = nationDef(world.playerId);
+  const joke = (JOKES.news as Record<string, string>)[event.id];
   const quiz = game!.quizWord;
   const waiting = game!.wordQueue.length > 0;
   useEffect(() => {
@@ -130,8 +132,11 @@ function News() {
         </div>
         <Bubble>
           <div className="flex items-center gap-3">
-            <div className="text-3xl font-black">{event.text}</div>
-            <SpeakButton text={event.text} />
+            <div>
+              <div className="text-3xl font-black">{event.text}</div>
+              {joke && <div className="mt-1 text-xl text-ink/75">{joke}</div>}
+            </div>
+            <SpeakButton text={joke ? `${event.text} ${joke}` : event.text} />
           </div>
         </Bubble>
         <button className="btn self-center" onClick={() => go('president')}>OK ➡</button>

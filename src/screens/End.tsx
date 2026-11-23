@@ -2,6 +2,8 @@ import { WORDS, cardById, eventById, nationDef } from '../data';
 import { LineChart } from '../components/LineChart';
 import { score, tier } from '../engine/detect';
 import { GUESS, TIER } from '../lib/text';
+import { JOKES } from '../lib/fun';
+import { Arti } from '../components/Arti';
 import { useGame, type Game } from '../store/game';
 import { Ranking } from './Report';
 
@@ -35,7 +37,8 @@ export function End() {
   if (!game) return null;
   const me = game.world.nations[game.world.playerId];
   const def = nationDef(me.id);
-  const t = TIER[tier(score(me))];
+  const tierId = tier(score(me));
+  const t = TIER[tierId];
   const right = game.log.filter((r) => r.correct).length;
   const big = [...game.log].sort((a, b) => Math.abs(b.inflation) - Math.abs(a.inflation))[0];
   const bigCard = big && (cardById(big.bank) ?? cardById(big.president));
@@ -47,6 +50,7 @@ export function End() {
           <div className="text-[17px] font-bold">{def.icon} {def.name} · {game.team} · World code {game.world.options.seed}</div>
           <h1 className="text-5xl font-black">{t.title}</h1>
           <p className="text-2xl font-bold">{t.text}</p>
+          <p className="mt-1 flex items-center gap-2 text-xl"><Arti size={40} sad={tierId === 'fallen'} /> {JOKES.end[tierId]}</p>
         </div>
         <div className="text-right text-xl font-bold">
           <div>⭐ Right guesses: {right} of {game.log.length}</div>

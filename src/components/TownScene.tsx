@@ -1,4 +1,5 @@
 import type { NationState } from '../engine/types';
+import { JOKES, pickLine } from '../lib/fun';
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, Math.round(v)));
 const fmt = (n: number) => (n >= 100 ? Math.round(n).toString() : n.toFixed(1));
@@ -26,7 +27,7 @@ function Person({ x, y, i, face, tool, idle }: { x: number; y: number; i: number
  * bread sign = price, baskets = goods, coin stacks = money, hearts = trust,
  * faces = happy, hammers = jobs, weather = how the land is doing.
  */
-export function TownScene({ s }: { s: NationState }) {
+export function TownScene({ s, year = 0 }: { s: NationState; year?: number }) {
   const mood = (s.trust + s.happiness + s.jobs) / 3;
   const level = mood >= 72 ? 3 : mood >= 50 ? 2 : mood >= 30 ? 1 : 0;
   const sky = ['#9aa5b1', '#c3d3e0', '#a9def7', '#86d3f8'][level];
@@ -37,6 +38,11 @@ export function TownScene({ s }: { s: NationState }) {
   const hearts = clamp(s.trust / 20, 0, 5);
   const coins = clamp(s.money / 12, 1, 36);
   const baskets = clamp(s.goods / 12, 1, 12);
+  const T = JOKES.town;
+  const mood2 = s.breadPrice >= 30 ? T.veryHigh : s.trust <= 25 ? T.noTrust : s.breadPrice >= 15 ? T.high
+    : s.jobs < 50 ? T.noJobs : s.breadPrice < 8 ? T.low : s.happiness < 35 ? T.sad : T.happy;
+  const say = pickLine(mood2, s.id, year, 'town');
+  const sayFace = mood2 === T.happy ? 'happy' : mood2 === T.high || mood2 === T.veryHigh ? 'flat' : 'sad';
   const face = (i: number) => (i < happy ? 'happy' : s.happiness < 35 ? 'sad' : 'flat') as 'happy' | 'flat' | 'sad';
 
   return (
@@ -105,6 +111,14 @@ export function TownScene({ s }: { s: NationState }) {
       </g>
 
       {/* People: faces show happy, hammers show jobs */}
+      {s.breadPrice >= 30 && <text x={150} y={240} fontSize={34}>🛒💰</text>}
+      <Person x={698} y={198} i={3} face={sayFace} />
+      <g>
+        <rect x={520} y={10} width={232} height={46} rx={18} fill="#fff" stroke="#3b2f2f" strokeWidth={3} />
+        <path d="M682 54 L700 54 L698 176 Z" fill="#fff" stroke="#3b2f2f" strokeWidth={3} strokeLinejoin="round" />
+        <rect x={680} y={50} width={22} height={8} fill="#fff" />
+        <text x={636} y={40} textAnchor="middle" fontSize={18} fontWeight={800} fill="#3b2f2f">{say}</text>
+      </g>
       {[0, 1, 2, 3, 4].map((i) => <Person key={`h${i}`} x={250 + i * 38} y={196} i={i} face={face(i)} />)}
       {[0, 1, 2, 3, 4].map((i) => <Person key={`w${i}`} x={468 + i * 46} y={200} i={i + 2} face={i < jobs ? 'happy' : 'flat'} tool={i < jobs} idle={i >= jobs} />)}
     </svg>
