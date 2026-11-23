@@ -60,7 +60,7 @@ export function End() {
       </div>
       <div className="panel bg-sky-50 p-4">
         {bigCard && <p className="text-xl">🔎 Your biggest choice: <b>Year {big.year}, {bigCard.icon} {bigCard.name}</b>.</p>}
-        <p className="text-2xl font-black">✏️ What would you do differently?</p>
+        <p className="text-2xl font-black">✏️ What will you do next time?</p>
         <div className="mt-2 hidden h-16 border-b-2 border-ink/40 print:block" />
       </div>
       <div className="panel p-3">

@@ -19,14 +19,14 @@
     "strong": "You make lots of goods.", "weak": "Your silver comes from far away.",
     "ko": "명·청 · 은괴(은본위). 은이 빠져나가면 디플레이션.",
     "start": { "goods": 120, "trust": 70, "reserve": 25, "netIncome": 5, "tradeOpen": true, "goldStandard": false } },
-  { "id": "calm", "name": "Morning Calm", "region": "East Asia", "currency": "Mun", "moneyKind": "Silver vase, then coins", "icon": "🏯", "color": "#2563eb",
+  { "id": "calm", "name": "Morning Calm", "region": "East Asia", "currency": "Mun", "moneyKind": "Silver vase and coins", "icon": "🏯", "color": "#2563eb",
     "lon": 129, "lat": 37, "iso": ["410", "408"], "acRate": 50,
     "strong": "Your farms feed the land.", "weak": "You have very few coins.",
     "ko": "고려·조선 · 은병에서 상평통보로. 전황(동전 부족)과 당백전.",
     "start": { "goods": 85, "trust": 55, "reserve": 10, "netIncome": 5, "tradeOpen": false, "goldStandard": false } },
-  { "id": "usa", "name": "United States", "region": "America", "currency": "Dollar", "moneyKind": "Gold-backed paper", "icon": "🗽", "color": "#1d4ed8",
+  { "id": "usa", "name": "United States", "region": "America", "currency": "Dollar", "moneyKind": "Paper money with gold", "icon": "🗽", "color": "#1d4ed8",
     "lon": -98, "lat": 39, "iso": ["840"], "acRate": 1,
-    "strong": "Your land is strong and trusted.", "weak": "Gold limits your money.",
+    "strong": "People trust your strong land.", "weak": "You need gold to make money.",
     "ko": "미국 · 달러와 비트코인. 금본위에서 신용화폐로.",
     "start": { "goods": 115, "trust": 80, "reserve": 60, "netIncome": 5, "tradeOpen": false, "goldStandard": true } }
 ]

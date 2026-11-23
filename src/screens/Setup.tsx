@@ -14,7 +14,7 @@ export function Title() {
         <div className="text-7xl">🪙</div>
         <h1 className="text-6xl font-black tracking-tight">Currency Wars</h1>
         <div className="text-3xl font-extrabold text-amber-700">Arti-Coin</div>
-        <p className="mt-2 text-2xl">Lead a land. Run its money for {settings.turns} years.</p>
+        <p className="mt-2 text-2xl">Lead a land. Take care of its money.</p>
       </div>
       <div className="relative flex flex-col items-stretch gap-3">
         {game && <button className="btn btn-green" onClick={() => go(game.world.year > game.world.options.turns ? 'end' : 'news')}>▶ Keep Playing</button>}
@@ -124,8 +124,8 @@ export function PickJob() {
         ))}
       </div>
       <div className="grid max-w-3xl grid-cols-2 gap-3 text-[18px]">
-        <div className="panel p-3"><b>👑 President</b><br />You lead the country. You spend and collect money.</div>
-        <div className="panel p-3"><b>🏦 Central Bank</b><br />You make the money. You decide how much.</div>
+        <div className="panel p-3"><b>👑 President</b><br />You lead the land. You spend and get gold.</div>
+        <div className="panel p-3"><b>🏦 Central Bank</b><br />You make the money. You pick how much.</div>
       </div>
       <div className="flex gap-3">
         <button className="btn btn-white" onClick={() => go('pickLand')}>⬅ Back</button>

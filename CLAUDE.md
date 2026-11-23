@@ -1,6 +1,6 @@
 # Currency Wars: Arti-Coin
 
-A browser money-history simulation for students who read English at a US Grade 2 level (AR 2.0–2.9).
+A browser money-history simulation for students who read English at a US Grade 2 level (target AR 2.3).
 The player is President + Central Bank of one of six lands for 10 years (turns). Full spec: `PRD.md`.
 
 ## Rules for all player-facing English
@@ -9,7 +9,8 @@ The player is President + Central Bank of one of six lands for 10 years (turns).
 - No economic jargon except the 10 Word Card words (`src/data/words.json`).
 - No percent signs on screen: use icons, arrows and colour together (never colour alone).
 - Buttons at least 64px, body text at least 20px, every sentence has a 🔊 read-aloud option.
-- Teacher mode text may be Korean.
+- Prefer short, common words (Dolch/Fry lists). Say "land", "mad", "pay back"; avoid words like "country", "limits", "debts".
+- The whole app is in English, teacher mode included. Korean appears only in the optional Korean hints.
 
 ## Architecture rules
 - `src/engine/` is pure TypeScript: no React imports, no `Math.random` (use the seeded RNG).
