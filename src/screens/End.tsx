@@ -1,4 +1,4 @@
-import { QUESTS, WORDS, cardById, eventById, nationDef } from '../data';
+import { QUESTS, WORDS, cardById, eventById, nationDef, questText } from '../data';
 import { CARD_ROLES } from '../engine/types';
 import { LineChart } from '../components/LineChart';
 import { score, tier } from '../engine/detect';
@@ -56,7 +56,7 @@ export function End() {
           <div className="text-3xl font-black text-amber-600">⭐ {game.quests.stars} stars</div>
           <div>🏅 Quests: {game.quests.done.length}</div>
           <div>🤔 Right guesses: {right} of {game.log.length}</div>
-          <div>📖 Words: {game.words.length} of 10</div>
+          <div>📖 Words: {game.words.length} of {WORDS.length}</div>
           <div>❤️ {Math.round(me.trust)} 🔨 {Math.round(me.jobs)} 😀 {Math.round(me.happiness)}</div>
         </div>
       </div>
@@ -73,7 +73,7 @@ export function End() {
         <h3 className="mb-1 text-xl font-black">🏅 My Quest Badges</h3>
         <div className="flex flex-wrap gap-2 text-[17px] font-bold">
           {QUESTS.map((q) => (
-            <span key={q.id} className={`rounded-full border-2 px-3 py-0.5 ${game.quests.done.includes(q.id) ? 'border-ink bg-green-200' : 'border-ink/20 text-ink/30'}`}>{q.icon} {q.text}</span>
+            <span key={q.id} className={`rounded-full border-2 px-3 py-0.5 ${game.quests.done.includes(q.id) ? 'border-ink bg-green-200' : 'border-ink/20 text-ink/30'}`}>{q.icon} {questText(q, game.world.playerId)}</span>
           ))}
         </div>
       </div>

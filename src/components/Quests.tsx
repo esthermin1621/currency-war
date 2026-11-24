@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { QUESTS, questById } from '../data';
+import { QUESTS, questById, questText } from '../data';
 import { questStats } from '../engine/quests';
 import { speak } from '../lib/speech';
 import { useGame } from '../store/game';
@@ -24,7 +24,7 @@ export function QuestBoard({ compact }: { compact?: boolean }) {
           <div key={id} className="flex flex-1 items-center gap-2 rounded-2xl border-[3px] border-ink bg-white px-2 py-1">
             <span className="text-3xl">{q.icon}</span>
             <div className="min-w-0 flex-1">
-              <div className="text-[17px] font-bold leading-tight">{q.text}</div>
+              <div className="text-[17px] font-bold leading-tight">{questText(q, game.world.playerId)}</div>
               <div className="mt-1 flex items-center gap-1.5">
                 <span className="h-3.5 flex-1 overflow-hidden rounded-full border-2 border-ink/40 bg-ink/5">
                   <span className="block h-full rounded-full bg-green-400 transition-all" style={{ width: `${(have / q.goal) * 100}%` }} />
@@ -61,7 +61,7 @@ export function QuestsOverlay() {
           return (
             <div key={q.id} className={`flex items-center gap-2 rounded-2xl border-[3px] px-3 py-1.5 text-[18px] font-bold ${done ? 'border-ink bg-green-100' : 'border-ink/25 bg-white text-ink/60'}`}>
               <span className="text-2xl">{done ? '🏅' : q.icon}</span>
-              <span className="flex-1">{q.text}</span>
+              <span className="flex-1">{questText(q, game.world.playerId)}</span>
               <span className="text-amber-600">+{q.stars}⭐</span>
             </div>
           );
@@ -77,9 +77,10 @@ export function QuestModal() {
   const dismiss = useGame((s) => s.dismissQuest);
   const id = game?.questQueue[0];
   const q = id ? questById(id) : null;
+  const text = q && game ? questText(q, game.world.playerId) : '';
   useEffect(() => {
-    if (q) speak(`Quest done! ${q.text}`);
-  }, [q]);
+    if (text) speak(`Quest done! ${text}`);
+  }, [text]);
   if (!game || !q || game.wordQueue.length) return null;
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-ink/60 p-6">
@@ -87,7 +88,7 @@ export function QuestModal() {
         <div className="text-[40px] leading-none">🎉 🏅 🎉</div>
         <div className="text-4xl font-black text-green-700">QUEST DONE!</div>
         <div className="flex items-center gap-2 text-2xl font-bold">
-          <span className="text-4xl">{q.icon}</span> {q.text} <SpeakButton small text={`Quest done! ${q.text}`} />
+          <span className="text-4xl">{q.icon}</span> {text} <SpeakButton small text={`Quest done! ${text}`} />
         </div>
         <div className="text-4xl">{'⭐'.repeat(q.stars)}</div>
         <div className="text-xl font-bold">You got {q.stars} {q.stars === 1 ? 'star' : 'stars'}!</div>

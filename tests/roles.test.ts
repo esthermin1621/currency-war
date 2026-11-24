@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CARDS, EVENTS, NATIONS, nationDef } from '../src/data';
+import { CARDS, EVENTS, NATIONS, nationDef, questText } from '../src/data';
 import questsJson from '../src/data/quests.json';
 import roles from '../src/data/roles.json';
 import { autoPlay } from '../src/engine/game';
@@ -55,7 +55,7 @@ describe('helpers cheer and complain', () => {
 
 describe('quests', () => {
   const year = (over: Partial<QuestYear> = {}): QuestYear => ({
-    correct: true, breadPrice: 10, treasury: 60, phenomenon: 'stable', picks: ['party'],
+    correct: true, breadPrice: 10, treasury: 60, acValue: 100, rank: 3, phenomenon: 'stable', picks: ['party'],
     moods: { king: 'cheer', bank: 'cheer', tax: 'ok', shop: 'ok', people: 'cheer' }, ...over,
   });
 
@@ -70,6 +70,17 @@ describe('quests', () => {
     expect(state.stars).toBe(5);
     expect(state.active).toHaveLength(3);
     expect(state.active).toContain('party');
+  });
+
+  it('a calm, trusted land makes ATI COIN cheaper and wins the ATI COIN quest', () => {
+    const g = autoPlay(data, { seed: 3, turns: 6, events: 'none' }, 'rome', () => ({ bank: 'steady', tax: 'sameTax', shop: 'bakeMore' }));
+    expect(g.final.acValue).toBeGreaterThanOrEqual(110);
+    const years = g.years.map((r) => ({ ...year(), acValue: r.state.acValue }));
+    expect(questStats(years, 0).strongYears).toBeGreaterThanOrEqual(1);
+  });
+
+  it('ATI COIN quest text uses the money of the land', () => {
+    expect(questText(QUESTS.find((q) => q.id === 'atiCheap')!, 'rome')).toBe('Make 1 ATI COIN cost under 9.1 Denarius.');
   });
 
   it('a 6-year Grade 1 game can finish several quests', () => {

@@ -7,6 +7,7 @@ The team runs one of six lands for 6 years by default (6/8/10 in teacher mode). 
 - Five helpers: 🤴 King, 🏦 Banker, 🧾 Tax Collector, 🧑‍🍳 Shopkeeper pick one card each year; 🙋 People make the bread-price guess.
 - Each role sees only 2 cards (Tax sees More / Same / Less). Risky cards show a ⚠️ sign (teacher can turn it off).
 - After the result, "Town Talk": every helper cheers or complains (`src/engine/roles.ts`, lines in `src/data/roles.json`).
+- The stats bar shows "1 ATI COIN = N <your money>". A strong, calm land needs fewer coins (green ⬇️). ATI COIN quests reward that (`CONFIG.atiStrong`, quest text fills in each land's money). The Reserve Currency word card was dropped as too hard.
 - Roblox-style quests: 3 on the board at a time, stars as rewards, badges on the end screen (`src/engine/quests.ts`, `src/data/quests.json`).
 
 ## Rules for all player-facing English

@@ -40,6 +40,8 @@ export const CONFIG = {
   score: { trust: 0.3, happiness: 0.25, jobs: 0.2, ac: 0.25, golden: 75, strong: 55, struggling: 35 }, // Grade 1: easier tiers
   specialMaxUses: 2,
   // Grade 1: few cards to choose from. Tax shows all three (more, same, less).
+  // ATI COIN quests: money is 'strong' when its value index (start 100) is this high.
+  atiStrong: 110,
   handSize: { king: 2, bank: 2, tax: 3, shop: 2 },
   // Who cheers and who complains (see roles.ts).
   mood: { goldMove: 5, highInflation: 0.1, tooPricey: 0.25, jobsDrop: -3, sadDrop: -8 },

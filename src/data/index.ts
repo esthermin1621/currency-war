@@ -38,3 +38,17 @@ export const HELPER_LINES = rolesJson.lines as unknown as Record<Helper, Record<
 export const helperDef = (id: Helper) => HELPERS_DEF.find((h) => h.id === id)!;
 export const QUESTS = questsJson as QuestDef[];
 export const questById = (id: string) => QUESTS.find((q) => q.id === id)!;
+
+import { CONFIG } from '../engine/config';
+
+/** How many of this land's coins you need for 1 ATI COIN. Goes down when the land is strong. */
+export const atiRate = (id: NationId, acValue: number) => (nationDef(id).acRate * 100) / acValue;
+export const fmtRate = (r: number) => (r >= 100 ? Math.round(r).toString() : r >= 1 ? r.toFixed(1) : r.toFixed(2));
+
+/** Quest text with this land's money filled in. */
+export function questText(q: QuestDef, id: NationId | null | undefined): string {
+  if (!id) return q.text.replace(' {target} {currency}', ' less').replace('{currency}', 'coins');
+  return q.text
+    .replace('{target}', fmtRate(atiRate(id, CONFIG.atiStrong)))
+    .replace('{currency}', nationDef(id).currency);
+}

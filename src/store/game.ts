@@ -148,6 +148,7 @@ export const useGame = create<Store>()(
           guess, correct, phenomenon: result.phenomenon, inflation: result.inflation,
           breadPrice: s.breadPrice, treasury: s.treasury, trust: s.trust, jobs: s.jobs, happiness: s.happiness, acValue: s.acValue,
           picks: Object.values(picks).filter((x): x is string => !!x),
+          rank: 1 + NATION_IDS.filter((n) => out.world.nations[n].acValue > s.acValue).length,
           moods: Object.fromEntries(HELPERS.map((h) => [h, talk[h].mood])) as QuestYear['moods'],
         };
         const usedInterest = CARDS.find((c) => c.id === picks.bank)?.tag === 'interest';
@@ -157,7 +158,7 @@ export const useGame = create<Store>()(
             PHENOMENON[result.phenomenon].word,
             usedInterest ? 'interest' : null,
             result.lostTrust ? 'trust' : null,
-            result.notes.includes('rebuild') ? 'reserve' : null,
+            result.notes.includes('rebuild') ? 'exchange' : null,
           ]),
           phase: 'result',
         });
@@ -166,7 +167,7 @@ export const useGame = create<Store>()(
       toTalk: () => {
         const g = get().game;
         if (!g?.last) return;
-        const withW = withWords(g, [g.last.year === 1 ? 'exchange' : null, g.last.year === 2 ? 'reserve' : null]);
+        const withW = withWords(g, [g.last.year === 1 ? 'exchange' : null]);
         set({ game: withQuests(withW), phase: 'talk' });
       },
 

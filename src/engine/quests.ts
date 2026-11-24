@@ -1,3 +1,4 @@
+import { CONFIG as C } from './config';
 import type { Helper, Phenomenon } from './types';
 import type { Mood } from './roles';
 
@@ -5,7 +6,7 @@ import type { Mood } from './roles';
 export type QuestStat =
   | 'years' | 'rightGuesses' | 'cheapYears' | 'maxGold' | 'words' | 'stableYears' | 'allCheerYears'
   | 'kingCheers' | 'bankCheers' | 'taxCheers' | 'shopCheers' | 'peopleCheers'
-  | 'party' | 'openTrade' | 'bakeMore';
+  | 'party' | 'openTrade' | 'bakeMore' | 'strongYears' | 'topYears';
 
 export interface QuestDef {
   id: string;
@@ -21,6 +22,10 @@ export interface QuestYear {
   correct: boolean;
   breadPrice: number;
   treasury: number;
+  /** money value against ATI COIN (start 100; higher = stronger) */
+  acValue: number;
+  /** 1 = strongest money of the six lands this year */
+  rank: number;
   phenomenon: Phenomenon;
   picks: string[];
   moods: Record<Helper, Mood>;
@@ -47,6 +52,8 @@ export function questStats(years: QuestYear[], words: number): Record<QuestStat,
     party: count((y) => y.picks.includes('party')),
     openTrade: count((y) => y.picks.includes('openTrade')),
     bakeMore: count((y) => y.picks.includes('bakeMore')),
+    strongYears: count((y) => y.acValue >= C.atiStrong),
+    topYears: count((y) => y.rank === 1),
   };
 }
 
