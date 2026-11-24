@@ -7,8 +7,9 @@ import { SpeakButton } from './SpeakButton';
 export function CardView({ card, onChoose }: { card: Card; onChoose: () => void }) {
   const [flipped, setFlipped] = useState(false);
   const ko = useGame((s) => s.settings.koHints);
+  const signs = useGame((s) => s.settings.riskSigns);
   const special = !!card.nation;
-  const tint = special ? 'bg-fuchsia-200' : card.role === 'president' ? 'bg-sky-200' : 'bg-amber-200';
+  const tint = special ? 'bg-fuchsia-200' : { king: 'bg-amber-200', bank: 'bg-sky-200', tax: 'bg-violet-200', shop: 'bg-rose-200' }[card.role];
   return (
     <div className="h-[252px] w-[200px] [perspective:1000px]">
       <div className={`flip relative h-full w-full ${flipped ? 'flipped' : ''}`}>
@@ -19,6 +20,7 @@ export function CardView({ card, onChoose }: { card: Card; onChoose: () => void 
           <span className={`relative flex h-[112px] w-full items-center justify-center text-[76px] leading-none ${tint}`}>
             {card.icon}
             {special && <span className="absolute left-2 top-2 rounded-full bg-fuchsia-600 px-2 py-0.5 text-[13px] font-bold text-white">★ Special</span>}
+            {signs && card.risky && <span className="absolute bottom-1.5 right-2 rounded-full border-2 border-ink bg-yellow-300 px-2 text-[14px] font-black">⚠️ Risky!</span>}
           </span>
           <span className="mt-1.5 px-2 text-[19px] font-black leading-tight">{card.name}</span>
           <span className="px-2 text-[16px] leading-snug">{card.text}</span>

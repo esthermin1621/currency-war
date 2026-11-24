@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NATIONS, nationDef } from '../data';
+import { HELPERS_DEF, NATIONS, nationDef } from '../data';
 import { AtiLogo, Bubble } from '../components/Ati';
 import { SpeakButton } from '../components/SpeakButton';
 import { JOKES } from '../lib/fun';
@@ -34,9 +34,9 @@ export function Title() {
 
 const HOW = [
   { icon: '📰', text: 'Read the news.' },
-  { icon: '👑🏦', text: 'Pick two cards.' },
-  { icon: '🤔🍞', text: 'Guess the bread price.' },
-  { icon: '📈', text: 'See what happens!' },
+  { icon: '🤴🏦🧾🧑‍🍳', text: 'Each helper picks a card.' },
+  { icon: '🙋🍞', text: 'Guess the bread price.' },
+  { icon: '📜⭐', text: 'Do quests. Get stars!' },
 ];
 
 export function HowTo() {
@@ -109,8 +109,8 @@ export function PickJob() {
   if (!pickedLand) return null;
   const n = nationDef(pickedLand);
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-5 p-6">
-      <div className="text-7xl">{n.icon}</div>
+    <div className="flex h-full flex-col items-center justify-center gap-4 p-6">
+      <div className="text-6xl">{n.icon}</div>
       <h1 className="text-4xl font-black">You lead {n.name}!</h1>
       <p className="text-xl">Your money is the <b>{n.currency}</b>.</p>
       <input
@@ -121,16 +121,21 @@ export function PickJob() {
         className="h-16 w-80 rounded-2xl border-[3px] border-ink bg-white px-4 text-center text-2xl font-bold"
       />
       <div className="flex gap-4">
-        {([['team', '👑 + 🏦', 'Two jobs, two friends'], ['solo', '🙋', 'I do both jobs']] as const).map(([m, icon, label]) => (
+        {([['team', '👫👭', 'Friends take turns'], ['solo', '🙋', 'I do all the jobs']] as const).map(([m, icon, label]) => (
           <button key={m} onClick={() => setMode(m)} className={`w-64 rounded-3xl border-[3px] p-4 ${mode === m ? 'border-amber-500 bg-amber-100' : 'border-ink bg-white'}`}>
             <div className="text-4xl">{icon}</div>
             <div className="text-xl font-bold">{label}</div>
           </button>
         ))}
       </div>
-      <div className="grid max-w-3xl grid-cols-2 gap-3 text-[18px]">
-        <div className="panel p-3"><b>👑 President</b><br />You lead the land. You spend and get gold.</div>
-        <div className="panel p-3"><b>🏦 Central Bank</b><br />You make the money. You pick how much.</div>
+      <div className="grid max-w-4xl grid-cols-5 gap-2 text-center text-[17px]">
+        {HELPERS_DEF.map((h) => (
+          <div key={h.id} className="rounded-3xl border-[3px] border-ink p-2" style={{ background: h.color }}>
+            <div className="text-5xl">{h.icon}</div>
+            <div className="font-black">{h.name}</div>
+            <div>{h.job}</div>
+          </div>
+        ))}
       </div>
       <div className="flex gap-3">
         <button className="btn btn-white" onClick={() => go('pickLand')}>⬅ Back</button>

@@ -3,11 +3,12 @@ import { End } from './screens/End';
 import { GameShell } from './screens/Game';
 import { TeacherOverlay, WordsOverlay } from './screens/Overlays';
 import { HowTo, PickJob, PickLand, Title } from './screens/Setup';
-import { useGame } from './store/game';
+import { IN_GAME, useGame } from './store/game';
+import { QuestModal, QuestsOverlay } from './components/Quests';
 
 export default function App() {
   const { phase, overlay, game } = useGame();
-  const inGame = ['news', 'president', 'bank', 'guess', 'result', 'report'].includes(phase);
+  const inGame = IN_GAME.includes(phase);
   return (
     <div className="h-full">
       {phase === 'title' && <Title />}
@@ -18,6 +19,8 @@ export default function App() {
       {inGame && !game && <Title />}
       {phase === 'end' && <End />}
       {(inGame || phase === 'end') && !overlay && <WordCardModal />}
+      {(phase === 'talk' || phase === 'news') && !overlay && <QuestModal />}
+      {overlay === 'quests' && <QuestsOverlay />}
       {overlay === 'words' && <WordsOverlay />}
       {overlay === 'teacher' && <TeacherOverlay />}
     </div>

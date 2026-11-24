@@ -76,6 +76,7 @@ export function TeacherOverlay() {
             ))}
           </div>
           <Toggle label="Easy mode: no random news (history news only)" on={settings.easy} set={(easy) => setSettings({ easy })} />
+ <Toggle label="Show ⚠️ Risky! signs on risky cards" on={settings.riskSigns} set={(riskSigns) => setSettings({ riskSigns })} />
           <Toggle label="Show Korean hints (one line per word)" on={settings.koHints} set={(koHints) => setSettings({ koHints })} />
           <Toggle label="Show a Teacher Talk question on word cards" on={settings.teacherTalk} set={(teacherTalk) => setSettings({ teacherTalk })} />
           <div className="flex flex-wrap items-center gap-2 text-[18px]">

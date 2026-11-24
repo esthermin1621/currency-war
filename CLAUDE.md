@@ -1,10 +1,16 @@
 # ATI ATI · Currency Wars (ATI COIN)
 
-A browser money-history simulation for students who read English at a US Grade 2 level (target AR 2.3).
-The player is President + Central Bank of one of six lands for 10 years (turns). Full spec: `PRD.md`.
+A browser money-history simulation, tuned for Grade 1 players (young readers, US Grade 1 English).
+The team runs one of six lands for 6 years by default (6/8/10 in teacher mode). Full spec: `PRD.md` (the game has since moved past it: see below).
+
+## Game design (current)
+- Five helpers: 🤴 King, 🏦 Banker, 🧾 Tax Collector, 🧑‍🍳 Shopkeeper pick one card each year; 🙋 People make the bread-price guess.
+- Each role sees only 2 cards (Tax sees More / Same / Less). Risky cards show a ⚠️ sign (teacher can turn it off).
+- After the result, "Town Talk": every helper cheers or complains (`src/engine/roles.ts`, lines in `src/data/roles.json`).
+- Roblox-style quests: 3 on the board at a time, stars as rewards, badges on the end screen (`src/engine/quests.ts`, `src/data/quests.json`).
 
 ## Rules for all player-facing English
-- Max 10 words per sentence, max 3 sentences per screen (word cards are the one 4-part exception).
+- Max 8 words per sentence (checked by tests), max 3 sentences per screen (word cards are the one 4-part exception).
 - Present or simple past tense, active voice, no relative clauses.
 - No economic jargon except the 10 Word Card words (`src/data/words.json`).
 - No percent signs on screen: use icons, arrows and colour together (never colour alone).
@@ -18,7 +24,7 @@ The player is President + Central Bank of one of six lands for 10 years (turns).
 - Every tuning number lives in `src/engine/config.ts`.
 - Card / event / nation / word content lives in `src/data/*.json`.
 - One Zustand store (`src/store/game.ts`), saved to localStorage.
-- Screen flow: title → pickLand → pickJob → [news → president → bank → guess → result → report] × turns → end.
+- Screen flow: title → pickLand → pickJob → [news → king → bank → tax → shop → guess → result → talk] × turns → end.
 
 ## Commands
 - `npm run dev` — run the game

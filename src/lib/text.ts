@@ -64,9 +64,11 @@ export const OTHER_NEWS: Record<Phenomenon, string> = {
 
 export const STEPS = [
   { phase: 'news', label: 'News', icon: '📰' },
-  { phase: 'president', label: 'President', icon: '👑' },
-  { phase: 'bank', label: 'Bank', icon: '🏦' },
-  { phase: 'guess', label: 'Guess', icon: '🤔' },
+  { phase: 'king', label: 'King', icon: '🤴' },
+  { phase: 'bank', label: 'Banker', icon: '🏦' },
+  { phase: 'tax', label: 'Tax Collector', icon: '🧾' },
+  { phase: 'shop', label: 'Shopkeeper', icon: '🧑‍🍳' },
+  { phase: 'guess', label: 'People', icon: '🙋' },
   { phase: 'result', label: 'Result', icon: '🍞' },
-  { phase: 'report', label: 'Report', icon: '📈' },
+  { phase: 'talk', label: 'Town Talk', icon: '🗣️' },
 ] as const;

@@ -24,7 +24,7 @@ function useCountUp(from: number, to: number, ms = 2500) {
 const fmt = (n: number) => (n >= 100 ? Math.round(n).toString() : n.toFixed(1));
 
 export function Result() {
-  const { game, toReport } = useGame();
+  const { game, toTalk } = useGame();
   const [why, setWhy] = useState(false);
   const last = game!.last!;
   const { prev, result } = last;
@@ -72,7 +72,7 @@ export function Result() {
           {guessLine}
         </div>
         {!why && <button className="btn btn-blue" onClick={() => setWhy(true)}>Why? 💡</button>}
-        <button className="btn" onClick={toReport}>Next ➡</button>
+        <button className="btn" onClick={toTalk}>Next ➡</button>
       </div>
     </div>
   );

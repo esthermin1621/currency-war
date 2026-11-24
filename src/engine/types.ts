@@ -1,5 +1,9 @@
 export type NationId = 'rome' | 'spain' | 'khan' | 'dragon' | 'calm' | 'usa';
-export type Role = 'president' | 'bank';
+/** Roles that pick a card each year. */
+export type Role = 'king' | 'bank' | 'tax' | 'shop';
+export const CARD_ROLES: Role[] = ['king', 'bank', 'tax', 'shop'];
+/** Everyone who cheers or complains (the people make the guess). */
+export type Helper = Role | 'people';
 
 /** Engine input shared by cards and events. Fractions for money/goods/price, points for the rest. */
 export interface Effect {
@@ -23,6 +27,8 @@ export interface Card {
   name: string;
   text: string;
   hint: string;
+  /** a ⚠️ sign for young players */
+  risky?: boolean;
   /** picture hint: what goes up or down */
   pic?: string;
   icon: string;
@@ -103,10 +109,8 @@ export type Reason =
   | 'calm' | 'freeze' | 'moreMoney' | 'fewerGoods' | 'lowTrust' | 'costs'
   | 'lessMoney' | 'moreGoods' | 'highTrust';
 
-export interface Choice {
-  president?: Card | null;
-  bank?: Card | null;
-}
+export type Choice = Partial<Record<Role, Card | null>>;
+export type ChoiceIds = Partial<Record<Role, string | null>>;
 
 export interface YearResult {
   state: NationState;

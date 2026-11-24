@@ -17,14 +17,14 @@ const firstYear = (g: ReturnType<typeof run>, p: string) => g.years.findIndex((y
 describe('balance scenarios (PRD section 12)', () => {
   it('Keep It Steady every year, no news: prices stay calm, Strong or better', () => {
     for (const id of NATION_IDS) {
-      const g = run(id, () => ({ president: null, bank: 'steady' }));
+      const g = run(id, () => ({ bank: 'steady' }));
       for (const y of g.years) expect(Math.abs(y.inflation)).toBeLessThanOrEqual(0.03);
       expect(['golden', 'strong']).toContain(tier(score(g.final)));
     }
   });
 
   it('Make Lots of Money every year: hyperinflation within 4 years, Fallen', () => {
-    const g = run('khan', () => ({ president: null, bank: 'makeLots' }));
+    const g = run('khan', () => ({ bank: 'makeLots' }));
     const y = firstYear(g, 'hyperinflation');
     expect(y).toBeGreaterThan(0);
     expect(y).toBeLessThanOrEqual(4);
@@ -32,7 +32,7 @@ describe('balance scenarios (PRD section 12)', () => {
   });
 
   it('Take Money Back every year: deflation within 3 years, jobs fall', () => {
-    const g = run('calm', () => ({ president: null, bank: 'takeBack' }));
+    const g = run('calm', () => ({ bank: 'takeBack' }));
     const y = firstYear(g, 'deflation');
     expect(y).toBeGreaterThan(0);
     expect(y).toBeLessThanOrEqual(3);
@@ -40,22 +40,22 @@ describe('balance scenarios (PRD section 12)', () => {
   });
 
   it('Oil shock + Make Lots of Money: stagflation that year', () => {
-    const g = run('usa', (y) => ({ president: null, bank: y === 8 ? 'makeLots' : 'steady' }), 'history');
+    const g = run('usa', (y) => ({ bank: y === 8 ? 'makeLots' : 'steady' }), 'history');
     expect(g.years[7].phenomenon).toBe('stagflation');
     // Same with a paper-money land hit by a storm-size goods shock.
-    const g2 = run('usa', (y) => ({ president: null, bank: y === 1 ? 'leaveGold' : y === 8 ? 'makeLots' : 'steady' }), 'history');
+    const g2 = run('usa', (y) => ({ bank: y === 1 ? 'leaveGold' : y === 8 ? 'makeLots' : 'steady' }), 'history');
     expect(g2.years[7].phenomenon).toBe('stagflation');
   });
 
   it('Rome: Less Silver twice: trust is 30 or less after people find out', () => {
-    const g = run('rome', (y) => ({ president: null, bank: y <= 2 ? 'lessSilver' : 'steady' }));
+    const g = run('rome', (y) => ({ bank: y <= 2 ? 'lessSilver' : 'steady' }));
     expect(g.years[2].notes).toContain('scandal');
     expect(g.years[3].notes).toContain('scandal');
     expect(g.years[3].state.trust).toBeLessThanOrEqual(30);
   });
 
   it('A good mix (Build + Make a Little + Back with Gold) can reach Golden Age', () => {
-    const mix: Strategy = (y, s) => ({ president: s.treasury >= 30 ? 'build' : y % 2 ? 'cutTax' : 'raiseTax', bank: y % 3 === 0 && s.reserve >= 20 ? 'goldBack' : 'makeLittle' });
+    const mix: Strategy = (y, s) => ({ king: s.treasury >= 30 ? 'build' : null, tax: s.treasury >= 30 ? null : y % 2 ? 'cutTax' : 'raiseTax', bank: y % 3 === 0 && s.reserve >= 20 ? 'goldBack' : 'makeLittle' });
     for (const id of ['dragon', 'rome', 'khan'] as NationId[]) {
       expect(tier(score(run(id, mix, 'history').final))).toBe('golden');
     }
@@ -64,7 +64,7 @@ describe('balance scenarios (PRD section 12)', () => {
   });
 
   it('Same seed and same choices: the result is exactly the same', () => {
-    const s: Strategy = (y) => ({ president: y % 2 ? 'build' : 'cutTax', bank: y % 3 ? 'makeLittle' : 'makeLots' });
+    const s: Strategy = (y) => ({ king: y % 2 ? 'build' : null, tax: y % 2 ? null : 'cutTax', bank: y % 3 ? 'makeLittle' : 'makeLots' });
     const a = run('spain', s, 'all', 4321);
     const b = run('spain', s, 'all', 4321);
     const c = run('spain', s, 'all', 9999);

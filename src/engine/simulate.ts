@@ -1,6 +1,7 @@
 import { CONFIG as C } from './config';
 import { detectPhenomenon } from './detect';
 import type { Rng } from './rng';
+import { CARD_ROLES } from './types';
 import type { Choice, Effect, EventCard, NationDef, NationState, Pending, Reason, YearResult } from './types';
 
 const clamp = (v: number, lo = 0, hi = 100) => Math.min(hi, Math.max(lo, v));
@@ -64,7 +65,7 @@ export function simulateYear(prev: NationState, choice: Choice, event: EventCard
     notes.push(s.bitcoin >= prev.bitcoin ? 'btcUp' : 'btcDown');
   }
 
-  // 1. Gather inputs: effects waiting from past years, then event, president, bank.
+  // 1. Gather inputs: effects waiting from past years, then event, then each role's card.
   type Src = 'pending' | 'event' | 'card';
   const inputs: { e: Effect; src: Src; tag?: string }[] = [];
   const pending: Pending[] = [];
@@ -75,7 +76,7 @@ export function simulateYear(prev: NationState, choice: Choice, event: EventCard
     } else pending.push({ ...p, in: p.in - 1 });
   }
   if (event) inputs.push({ e: event.effect, src: 'event', tag: event.tag });
-  for (const c of [choice.president, choice.bank]) {
+  for (const c of CARD_ROLES.map((r) => choice[r])) {
     if (!c) continue;
     inputs.push({ e: c.effect, src: 'card', tag: c.tag });
     if (c.nation) s.specialUses[c.id] = (s.specialUses[c.id] ?? 0) + 1;

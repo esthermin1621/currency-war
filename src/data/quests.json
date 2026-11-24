@@ -1,0 +1,16 @@
+[
+  { "id": "firstYear", "icon": "🏁", "text": "Finish your first year!", "stat": "years", "goal": 1, "stars": 1 },
+  { "id": "guess2", "icon": "🤔", "text": "Guess right 2 times.", "stat": "rightGuesses", "goal": 2, "stars": 2 },
+  { "id": "peopleCheer", "icon": "🙋", "text": "Make the people cheer 2 times.", "stat": "peopleCheers", "goal": 2, "stars": 2 },
+  { "id": "party", "icon": "🥳", "text": "Throw a party!", "stat": "party", "goal": 1, "stars": 1 },
+  { "id": "words3", "icon": "📖", "text": "Find 3 money words.", "stat": "words", "goal": 3, "stars": 1 },
+  { "id": "cheap3", "icon": "🍞", "text": "Keep bread under 15 for 3 years.", "stat": "cheapYears", "goal": 3, "stars": 3 },
+  { "id": "shopCheer", "icon": "🏪", "text": "Make the shop cheer 2 times.", "stat": "shopCheers", "goal": 2, "stars": 2 },
+  { "id": "bake", "icon": "🥖", "text": "Bake more bread.", "stat": "bakeMore", "goal": 1, "stars": 1 },
+  { "id": "calmYear", "icon": "⭐", "text": "Have a calm price year.", "stat": "stableYears", "goal": 1, "stars": 2 },
+  { "id": "gold100", "icon": "💰", "text": "Get 100 gold in the gold box.", "stat": "maxGold", "goal": 100, "stars": 2 },
+  { "id": "kingCheer", "icon": "👑", "text": "Make the king cheer 3 times.", "stat": "kingCheers", "goal": 3, "stars": 2 },
+  { "id": "bankCheer", "icon": "🏦", "text": "Make the banker cheer 3 times.", "stat": "bankCheers", "goal": 3, "stars": 2 },
+  { "id": "trade", "icon": "🚢", "text": "Open the gates to trade.", "stat": "openTrade", "goal": 1, "stars": 1 },
+  { "id": "allCheer", "icon": "🎉", "text": "Make everyone cheer in one year!", "stat": "allCheerYears", "goal": 1, "stars": 5 }
+]

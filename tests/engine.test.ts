@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { CARDS, EVENTS, NATIONS, cardById, nationDef } from '../src/data';
 import jokes from '../src/data/jokes.json';
+import roles from '../src/data/roles.json';
+import quests from '../src/data/quests.json';
 import { detectPhenomenon, priceDirection } from '../src/engine/detect';
 import { createWorld, dealHand } from '../src/engine/game';
 import { makeRng } from '../src/engine/rng';
@@ -41,20 +43,22 @@ describe('engine', () => {
     expect(priceDirection(0)).toBe('same');
   });
 
-  it('deals 3 common cards per role, plus special cards', () => {
+  it('deals 2 common cards per role (3 for tax), plus special cards', () => {
     const w = createWorld(data, { seed: 7, turns: 10, events: 'all' }, 'rome');
     const hand = dealHand(data, w);
-    expect(hand.president).toHaveLength(3);
-    expect(hand.bank).toHaveLength(4);
+    expect(hand.king).toHaveLength(2);
+    expect(hand.bank).toHaveLength(3);
     expect(hand.bank).toContain('lessSilver');
+    expect(hand.tax).toEqual(expect.arrayContaining(['raiseTax', 'sameTax', 'cutTax']));
+    expect(hand.shop).toHaveLength(2);
   });
 
-  it('player-facing sentences have 10 words or fewer', () => {
+  it('player-facing sentences have 8 words or fewer (Grade 1)', () => {
     const flat = (v: unknown): string[] => (typeof v === 'string' ? [v] : Object.values(v as object).flatMap(flat));
-    const texts = [...CARDS.flatMap((c) => [c.text, c.hint]), ...EVENTS.map((e) => e.text), ...flat(jokes)];
+    const texts = [...CARDS.flatMap((c) => [c.text, c.hint]), ...EVENTS.map((e) => e.text), ...flat(jokes), ...flat(roles.lines), ...roles.helpers.map((h) => h.job), ...quests.map((q) => q.text)];
     for (const t of texts) {
       for (const sentence of t.split(/[.!?]+/).filter((x) => x.trim())) {
-        expect(sentence.trim().split(/\s+/).length, sentence).toBeLessThanOrEqual(10);
+        expect(sentence.trim().split(/\s+/).length, sentence).toBeLessThanOrEqual(8);
       }
     }
   });

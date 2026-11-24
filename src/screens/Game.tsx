@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { cardById, eventById, nationDef, wordById } from '../data';
+import { cardById, eventById, helperDef, nationDef, wordById } from '../data';
 import { CardView } from '../components/CardView';
 import { AtiLogo, Bubble } from '../components/Ati';
 import { SpeakButton } from '../components/SpeakButton';
@@ -7,13 +7,13 @@ import { StatStrip } from '../components/StatStrip';
 import { TownScene } from '../components/TownScene';
 import { WorldMap } from '../components/WorldMap';
 import type { GuessDir } from '../engine/detect';
-import type { Role } from '../engine/types';
+import { CARD_ROLES, type Role } from '../engine/types';
 import { speak } from '../lib/speech';
 import { GUESS, STEPS } from '../lib/text';
 import { JOKES } from '../lib/fun';
 import { useGame } from '../store/game';
-import { Report } from './Report';
 import { Result } from './Result';
+import { Talk } from './Talk';
 
 /** Main game frame: one big picture on top (town or world map), picture meters, then this year's step. */
 export function GameShell() {
@@ -25,9 +25,9 @@ export function GameShell() {
   const me = world.nations[world.playerId];
   const def = nationDef(me.id);
   const turns = world.options.turns;
-  const shownYear = Math.min(turns, phase === 'result' || phase === 'report' ? world.year - 1 : world.year);
+  const shownYear = Math.min(turns, phase === 'result' || phase === 'talk' ? world.year - 1 : world.year);
   const step = STEPS.findIndex((s) => s.phase === phase);
-  const showMap = view === 'auto' ? phase === 'report' : view === 'map';
+  const showMap = view === 'map';
 
   return (
     <div className="flex h-full flex-col gap-2 p-2.5">
@@ -51,7 +51,10 @@ export function GameShell() {
           {STEPS.map((s, i) => <span key={s.phase} className={i === step ? 'mx-0.5 text-3xl' : 'opacity-30'}>{s.icon}</span>)}
         </span>
         <button className="btn btn-white !min-h-[52px] !px-3 !text-[17px]" onClick={() => setView(showMap ? 'town' : 'map')}>
-          <span className="whitespace-nowrap">{showMap ? '🏘️ Town' : '🌍 World'}</span>
+          <span className="whitespace-nowrap">{showMap ? '🏘️' : '🌍'}</span>
+        </button>
+        <button className="btn !min-h-[52px] !px-3 !text-[17px]" onClick={() => setOverlay('quests')} aria-label="Quests and stars">
+          <span className="whitespace-nowrap">⭐ {game.quests.stars}</span>
         </button>
         <button className="btn btn-white !min-h-[52px] !px-3 !text-[17px]" onClick={() => setOverlay('words')} aria-label="My Money Words">
           <span className="whitespace-nowrap">📖 {game.words.length}</span>
@@ -67,11 +70,10 @@ export function GameShell() {
       <StatStrip s={me} prev={game.last?.prev} />
       <section className="panel min-h-0 flex-1 overflow-auto p-3">
         {phase === 'news' && <News />}
-        {phase === 'president' && <ChoiceStep role="president" />}
-        {phase === 'bank' && <ChoiceStep role="bank" />}
+        {CARD_ROLES.map((r) => phase === r && <ChoiceStep key={r} role={r} />)}
         {phase === 'guess' && <Guess />}
         {phase === 'result' && <Result />}
-        {phase === 'report' && <Report />}
+        {phase === 'talk' && <Talk />}
       </section>
     </div>
   );
@@ -139,7 +141,7 @@ function News() {
             <SpeakButton text={joke ? `${event.text} ${joke}` : event.text} />
           </div>
         </Bubble>
-        <button className="btn self-center" onClick={() => go('president')}>OK ➡</button>
+        <button className="btn self-center" onClick={() => go('king')}>OK ➡</button>
       </div>
     </div>
   );
@@ -154,17 +156,21 @@ function ChoiceStep({ role }: { role: Role }) {
       ? { ...c, name: 'Sell Bitcoin', text: 'Sell your Bitcoin for gold.', hint: 'You get gold back. It may be more or less.' }
       : c,
   );
-  const title = role === 'president' ? '👑 President' : '🏦 Central Bank';
-  const line = role === 'president' ? 'You spend the gold. Pick one card.' : 'You make the money. Pick one card.';
+  const h = helperDef(role);
+  const title = `${h.name}, it is your turn!`;
+  const line = `${h.job} Pick one card.`;
   return (
     <div className="flex h-full flex-col items-center gap-2">
-      <Bubble size={54}>
-        <div className="flex items-center gap-3">
-          <h2 className="whitespace-nowrap text-2xl font-black">{title}{g.mode === 'team' ? ', your turn!' : ''}</h2>
-          <span className="text-xl">{line}</span>
-          <SpeakButton small text={line} />
+      <div className="flex items-center gap-3">
+        <span className="pop flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-ink text-[40px]" style={{ background: h.color }}>{h.icon}</span>
+        <div className="rounded-3xl border-[3px] border-ink bg-white px-4 py-1.5">
+          <div className="flex items-center gap-3">
+            <h2 className="whitespace-nowrap text-2xl font-black">{title}</h2>
+            <span className="text-xl">{line}</span>
+            <SpeakButton small text={`${title} ${line}`} />
+          </div>
         </div>
-      </Bubble>
+      </div>
       <div className="flex flex-1 flex-wrap items-center justify-center gap-4">
         {cards.map((c) => <CardView key={`${g.world.year}-${c.id}`} card={c} onChoose={() => pickCard(role, c.id)} />)}
       </div>
@@ -176,22 +182,27 @@ function Guess() {
   const { game, makeGuess } = useGame();
   const g = game!;
   const q = 'Will bread cost more or less?';
-  const picked = [cardById(g.choice.president), cardById(g.choice.bank)];
+  const people = helperDef('people');
+  const picked = CARD_ROLES.map((r) => cardById(g.choice[r]));
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-      <div className="flex gap-2 text-[17px] font-bold">
+      <div className="flex flex-wrap justify-center gap-2 text-[16px] font-bold">
         {picked.map((c) => c && <span key={c.id} className="rounded-full border-2 border-ink/60 bg-white px-3 py-1">{c.icon} {c.name}</span>)}
       </div>
-      <Bubble>
-        <div className="flex items-center gap-3">
-          <h2 className="text-4xl font-black">{q}</h2>
-          <SpeakButton small text={q} />
+      <div className="flex items-center gap-3">
+        <span className="pop flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-ink text-[40px]" style={{ background: people.color }}>{people.icon}</span>
+        <div className="rounded-3xl border-[3px] border-ink bg-white px-4 py-1.5 text-left">
+          <div className="text-[16px] font-black uppercase text-ink/60">People, it is your turn!</div>
+          <div className="flex items-center gap-3">
+            <h2 className="text-3xl font-black">{q}</h2>
+            <SpeakButton small text={`People, it is your turn! ${q}`} />
+          </div>
         </div>
-      </Bubble>
+      </div>
       <div className="flex gap-5">
         {(['up', 'same', 'down'] as GuessDir[]).map((d) => (
-          <button key={d} className="btn btn-white !h-36 w-52 !text-2xl" onClick={() => makeGuess(d)}>
-            <div className="text-6xl">🍞{GUESS[d].icon}</div>
+          <button key={d} className="btn btn-white flex !h-36 w-48 flex-col items-center justify-center !text-2xl" onClick={() => makeGuess(d)}>
+            <div className="text-5xl leading-tight">🍞{GUESS[d].icon}</div>
             {GUESS[d].label}
           </button>
         ))}

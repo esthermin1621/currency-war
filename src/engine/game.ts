@@ -2,7 +2,8 @@ import { chooseAI, availableCards } from './ai';
 import { CONFIG as C } from './config';
 import { makeRng, mixSeed, pick, sample } from './rng';
 import { createNation, simulateYear } from './simulate';
-import type { Card, EventCard, NationDef, NationId, NationState, YearResult } from './types';
+import { CARD_ROLES } from './types';
+import type { Card, Choice, ChoiceIds, EventCard, NationDef, NationId, NationState, Role, YearResult } from './types';
 
 export interface GameData {
   nations: NationDef[];
@@ -72,53 +73,54 @@ export function createWorld(data: GameData, options: GameOptions, playerId: Nati
 export const eventFor = (data: GameData, w: World, id: NationId, year = w.year): EventCard | null =>
   data.events.find((e) => e.id === w.schedules[id][year - 1]) ?? null;
 
-/** The cards shown to the player this year: 3 common cards plus unlocked special cards. */
-export function dealHand(data: GameData, w: World): { president: string[]; bank: string[] } {
+/** The cards shown to the player this year: a few common cards per role, plus unlocked special cards. */
+export function dealHand(data: GameData, w: World): Record<Role, string[]> {
   const s = w.nations[w.playerId];
   const scale = w.options.turns / 10;
-  const deal = (role: 'president' | 'bank') => {
+  const deal = (role: Role) => {
     const all = availableCards(data.cards, s, w.year, role, scale);
     const common = all.filter((c) => !c.nation);
     const rng = makeRng(mixSeed(w.options.seed, 'hand', role, w.year));
-    let hand = sample(rng, common, 3);
+    let hand = sample(rng, common, C.handSize[role]);
     // War news: the bank is always tempted to pay for it with new money.
     if (role === 'bank' && eventFor(data, w, w.playerId)?.tag === 'forceMakeLots' && !hand.some((c) => c.id === 'makeLots')) {
-      hand = [common.find((c) => c.id === 'makeLots')!, ...hand.slice(0, 2)];
+      hand = [common.find((c) => c.id === 'makeLots')!, ...hand.slice(0, C.handSize.bank - 1)];
     }
     return [...hand, ...all.filter((c) => c.nation)].map((c) => c.id);
   };
-  return { president: deal('president'), bank: deal('bank') };
+  return Object.fromEntries(CARD_ROLES.map((r) => [r, deal(r)])) as Record<Role, string[]>;
 }
 
 export interface YearOutcome {
   world: World;
   results: Record<NationId, YearResult>;
-  choices: Record<NationId, { president: string | null; bank: string | null }>;
+  choices: Record<NationId, ChoiceIds>;
 }
 
 /** Play one year for every land. The player's cards come in; computer lands choose their own. */
-export function playYear(data: GameData, w: World, choice: { president: string | null; bank: string | null }): YearOutcome {
+export function playYear(data: GameData, w: World, choice: ChoiceIds): YearOutcome {
   const year = w.year;
   const scale = w.options.turns / 10;
   const results = {} as Record<NationId, YearResult>;
   const choices = {} as YearOutcome['choices'];
   const nations = {} as Record<NationId, NationState>;
-  const card = (id: string | null, s: NationState) => {
+  const card = (id: string | null | undefined, s: NationState, role: Role) => {
     const c = data.cards.find((x) => x.id === id) ?? null;
-    if (c?.nation && (c.nation !== s.id || (s.specialUses[c.id] ?? 0) >= C.specialMaxUses)) return null;
+    if (!c || c.role !== role) return null;
+    if (c.nation && (c.nation !== s.id || (s.specialUses[c.id] ?? 0) >= C.specialMaxUses)) return null;
     return c;
   };
 
   for (const def of data.nations) {
     const s = w.nations[def.id];
     const rng = makeRng(mixSeed(w.options.seed, 'year', def.id, year));
-    const picked = def.id === w.playerId
-      ? { president: card(choice.president, s), bank: card(choice.bank, s) }
+    const picked: Choice = def.id === w.playerId
+      ? Object.fromEntries(CARD_ROLES.map((r) => [r, card(choice[r], s, r)]))
       : chooseAI(data.cards, s, year, makeRng(mixSeed(w.options.seed, 'ai', def.id, year)), scale);
     const r = simulateYear(s, picked, eventFor(data, w, def.id), rng);
     results[def.id] = r;
     nations[def.id] = r.state;
-    choices[def.id] = { president: picked.president?.id ?? null, bank: picked.bank?.id ?? null };
+    choices[def.id] = Object.fromEntries(CARD_ROLES.map((role) => [role, picked[role]?.id ?? null]));
   }
 
   // Silver road: when Spain floods the world with silver, it reaches Silver Dragon next year.
@@ -132,16 +134,18 @@ export function playYear(data: GameData, w: World, choice: { president: string |
   return { world: { ...w, year: year + 1, nations }, results, choices };
 }
 
-export type Strategy = (year: number, s: NationState) => { president: string | null; bank: string | null };
+export type Strategy = (year: number, s: NationState) => ChoiceIds;
 
 /** Run a whole game without a screen (tests and the console script use this). */
 export function autoPlay(data: GameData, options: GameOptions, playerId: NationId, strategy: Strategy) {
   let world = createWorld(data, options, playerId);
   const years: YearResult[] = [];
+  const picks: ChoiceIds[] = [];
   for (let y = 1; y <= options.turns; y++) {
     const out = playYear(data, world, strategy(y, world.nations[playerId]));
     world = out.world;
     years.push(out.results[playerId]);
+    picks.push(out.choices[playerId]);
   }
-  return { world, years, final: world.nations[playerId] };
+  return { world, years, picks, final: world.nations[playerId] };
 }

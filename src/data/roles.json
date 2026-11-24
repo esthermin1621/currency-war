@@ -1,0 +1,52 @@
+{
+  "helpers": [
+    { "id": "king", "name": "King", "icon": "🤴", "color": "#fde68a", "job": "I spend the gold." },
+    { "id": "bank", "name": "Banker", "icon": "🏦", "color": "#bae6fd", "job": "I make the coins." },
+    { "id": "tax", "name": "Tax Collector", "icon": "🧾", "color": "#ddd6fe", "job": "I take the tax." },
+    { "id": "shop", "name": "Shopkeeper", "icon": "🧑‍🍳", "color": "#fecdd3", "job": "I sell the bread." },
+    { "id": "people", "name": "People", "icon": "🙋", "color": "#bbf7d0", "job": "I buy the bread." }
+  ],
+  "lines": {
+    "king": {
+      "party": ["I love parties! Woo-hoo! 🥳"],
+      "warWon": ["We won! Hooray! ⚔️"],
+      "warLost": ["We lost the war. Boo hoo. 😢"],
+      "debt": ["I owe gold. Oh no! 📝"],
+      "moreGold": ["More gold for me! Ha ha! 💰", "My gold box is full!"],
+      "lessGold": ["Where did my gold go? 😱", "My gold box is so light!"]
+    },
+    "bank": {
+      "pricesUp": ["Too many coins! Stop! 🛑", "The coins are going wild!"],
+      "pricesDown": ["Not enough coins! Help! 🪙"],
+      "steady": ["Nice and calm. I like it. 😌", "Steady prices! Good job! ⚖️"]
+    },
+    "tax": {
+      "moreTax": ["More tax! Ka-ching! 💰", "Pay up, please! I love my job!"],
+      "lessTax": ["Less tax? Boo! My bag is empty."],
+      "poorPeople": ["No jobs, no tax. Oh no!"],
+      "busyTown": ["People work. They pay tax! 😊"]
+    },
+    "shop": {
+      "noBuyers": ["No one buys! My shop is empty. 😢"],
+      "tooPricey": ["Too pricey! No one can buy!"],
+      "gatesClosed": ["Gates closed? No new stuff to sell!"],
+      "sale": ["Big sale! I made less gold. 😅"],
+      "higherPrices": ["Higher prices! More gold for me! 🤑"],
+      "trade": ["New stuff from far away! Yay! 🐪"],
+      "moreBread": ["Fresh bread! Come and buy! 🥖"],
+      "busy": ["So many buyers! Ka-ching! 🛍️"]
+    },
+    "people": {
+      "breadUp": ["Boo! Bread costs too much! 😠", "My bread got so pricey!"],
+      "taxUp": ["More tax? Boo! 😠", "My piggy bank is empty! 🐷"],
+      "noJobs": ["No work for me. 😢"],
+      "sad": ["We are sad today. 😢"],
+      "party": ["Party time! Woo-hoo! 🥳"],
+      "taxDown": ["Less tax! Hooray! 🎉"],
+      "sale": ["A big sale! Yay! 🛍️"],
+      "cheapBread": ["Yay! Bread is cheap! 🎉"],
+      "jobs": ["I have a job! Yay! 🔨", "Yum! I can buy bread!"]
+    },
+    "ok": ["Hmm. Okay. 😐", "Not bad. Not good."]
+  }
+}

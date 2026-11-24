@@ -26,3 +26,15 @@ export const nationDef = (id: NationId) => NATIONS.find((n) => n.id === id)!;
 export const cardById = (id: string | null | undefined) => CARDS.find((c) => c.id === id) ?? null;
 export const eventById = (id: string | null | undefined) => EVENTS.find((e) => e.id === id) ?? null;
 export const wordById = (id: string) => WORDS.find((w) => w.id === id)!;
+
+import rolesJson from './roles.json';
+import questsJson from './quests.json';
+import type { Helper } from '../engine/types';
+import type { QuestDef } from '../engine/quests';
+
+export interface HelperDef { id: Helper; name: string; icon: string; color: string; job: string }
+export const HELPERS_DEF = rolesJson.helpers as HelperDef[];
+export const HELPER_LINES = rolesJson.lines as unknown as Record<Helper, Record<string, string[]>> & { ok: string[] };
+export const helperDef = (id: Helper) => HELPERS_DEF.find((h) => h.id === id)!;
+export const QUESTS = questsJson as QuestDef[];
+export const questById = (id: string) => QUESTS.find((q) => q.id === id)!;
